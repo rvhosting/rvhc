@@ -33,3 +33,6 @@ go.work.sum
 
 # config file
 *.json
+
+# minihttpsys dir
+minihttpsys/
