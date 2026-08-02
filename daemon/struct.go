@@ -5,6 +5,6 @@ type ListenConfig struct {
 	Port int    `json:"port"`
 }
 
-type ConfigStruct struct {
+type daemonConfig struct {
 	Listen ListenConfig `json:"listen"`
 }

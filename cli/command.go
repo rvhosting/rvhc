@@ -6,13 +6,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var RootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use:   "rvhc",
 	Short: "rvhosting cli",
 }
 
-var DaemonCmd = &cobra.Command{
+var daemonCmd = &cobra.Command{
 	Use:   "daemon",
 	Short: "start daemon",
-	Run:   daemon.Start,
+	Run: func(cmd *cobra.Command, args []string) {
+		daemon.Start()
+	},
 }

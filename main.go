@@ -1,5 +1,7 @@
 package main
 
-import _ "rvhc/cli"
+import "rvhc/cli"
 
-func main() {}
+func main() {
+	cli.Init()
+}

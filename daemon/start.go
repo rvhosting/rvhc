@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-
-	"github.com/spf13/cobra"
 )
 
 var ConfigFile string
-var config ConfigStruct
+var config daemonConfig
 
-func Start(cmd *cobra.Command, args []string) {
+func Start() {
 	f, err := os.Open(ConfigFile)
 	if err != nil {
 		log.Fatalln(err)

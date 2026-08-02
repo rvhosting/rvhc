@@ -2,12 +2,11 @@ package cli
 
 import "os"
 
-func init() {
-	initarg()
+func Init() {
+	initArg()
+	initCmd()
 
-	RootCmd.AddCommand(DaemonCmd)
-
-	if err := RootCmd.Execute(); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
