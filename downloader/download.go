@@ -26,7 +26,7 @@ func Download() {
 
 		for i := 1; i <= MaxRetry; i++ {
 			err := func() error {
-				f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+				f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 				if err != nil {
 					return err
 				}
