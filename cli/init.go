@@ -1,6 +1,8 @@
 package cli
 
-import "os"
+import (
+	"os"
+)
 
 func Init() {
 	initArg()

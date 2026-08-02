@@ -1,6 +1,8 @@
 package daemon
 
-import "rvhc/protocol"
+import (
+	"rvhc/protocol"
+)
 
 type ListenConfig struct {
 	Host string `json:"host"`

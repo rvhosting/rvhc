@@ -1,6 +1,8 @@
 package main
 
-import "rvhc/cli"
+import (
+	"rvhc/cli"
+)
 
 func main() {
 	cli.Init()
