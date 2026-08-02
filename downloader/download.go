@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 var baseDir = "minihttpsys"
 var baseUrl = "https://github.com/rvhosting/minihttpsys/releases/latest/download"
 var files = []string{"bios.bin", "kernel.bin", "sys.img"}
+var MaxRetry int
 
 func Download() {
 	cleandir()
@@ -21,20 +23,35 @@ func Download() {
 		url := fmt.Sprintf("%s/%s", baseUrl, file)
 
 		log.Println("download", url, "to", path)
-		func() {
-			f, err := os.Create(path)
-			if err != nil {
-				log.Fatalln(err)
-			}
 
-			resp, err := http.Get(url)
-			if err != nil {
-				log.Fatalln(err)
-			}
+		for i := 1; i <= MaxRetry; i++ {
+			err := func() error {
+				f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+				if err != nil {
+					return err
+				}
+				defer f.Close()
 
-			defer f.Close()
-			defer resp.Body.Close()
-			io.Copy(f, resp.Body)
-		}()
+				resp, err := http.Get(url)
+				if err != nil {
+					return err
+				}
+				defer resp.Body.Close()
+
+				if _, err := io.Copy(f, resp.Body); err != nil {
+					return err
+				}
+
+				return nil
+			}()
+
+			if err != nil {
+				if i == MaxRetry {
+					log.Fatalln(err)
+				}
+
+				slog.Error(err.Error(), "retry", i)
+			}
+		}
 	}
 }
