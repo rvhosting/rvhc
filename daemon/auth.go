@@ -1,7 +1,6 @@
 package daemon
 
 import (
-	"encoding/json"
 	"log/slog"
 	"net"
 	"rvhc/protocol"
@@ -9,10 +8,12 @@ import (
 
 func auth(conn net.Conn) bool {
 	var userAuth protocol.Auth
-	if err := json.NewDecoder(conn).Decode(&userAuth); err != nil {
+	if err := protocol.Read(conn, &userAuth); err != nil {
 		slog.Error(err.Error())
 		return false
 	}
 
-	return userAuth == config.Auth
+	success := userAuth == config.Auth
+	protocol.Write(conn, protocol.Status{Success: success})
+	return success
 }
