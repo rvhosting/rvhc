@@ -7,8 +7,8 @@ import (
 	"log/slog"
 	"net"
 	"os"
-	"rvhc/daemon/dataimg"
-	"rvhc/daemon/db"
+	"rvhc/daemon/internal/dataimg"
+	"rvhc/daemon/internal/db"
 )
 
 var ConfigFile string

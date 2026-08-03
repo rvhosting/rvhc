@@ -16,7 +16,7 @@ func process(conn net.Conn) {
 
 		switch payload.Type {
 
-		case "limit":
+		case "get-limit":
 			var names []string
 			if err := payload.UnmarshalTo(&names); err != nil {
 				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
