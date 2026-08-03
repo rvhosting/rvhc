@@ -7,10 +7,9 @@ import (
 )
 
 type VM struct {
-	ID      string `gorm:"primaryKey;type:varchar(36);not null" json:"id"`
-	DataImg string `gorm:"type:text;not null;unique" json:"data_img"`
-	CPU     int    `gorm:"not null" json:"cpu"`
-	Memory  int    `gorm:"not null" json:"memory"`
+	ID     string `gorm:"primaryKey;type:varchar(36);not null" json:"id"`
+	CPU    int    `gorm:"not null" json:"cpu"`
+	Memory int    `gorm:"not null" json:"memory"`
 }
 
 func (vm *VM) BeforeCreate(*gorm.DB) error {
