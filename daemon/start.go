@@ -7,12 +7,15 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"rvhc/daemon/db"
 )
 
 var ConfigFile string
 var config daemonConfig
 
 func Start() {
+	db.Init()
+
 	f, err := os.Open(ConfigFile)
 	if err != nil {
 		log.Fatalln(err)
