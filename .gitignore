@@ -39,3 +39,6 @@ minihttpsys/
 
 # database file
 *.db
+
+# data images
+dataimgs/

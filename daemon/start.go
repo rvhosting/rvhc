@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net"
 	"os"
+	"rvhc/daemon/dataimg"
 	"rvhc/daemon/db"
 )
 
@@ -15,6 +16,7 @@ var config daemonConfig
 
 func Start() {
 	db.Init()
+	dataimg.Init()
 
 	f, err := os.Open(ConfigFile)
 	if err != nil {
