@@ -10,7 +10,7 @@ type VM struct {
 	ID string `gorm:"primaryKey;type:varchar(36)"`
 }
 
-func (vm *VM) BeforeCreate(_ *gorm.Config) error {
+func (vm *VM) BeforeCreate(*gorm.DB) error {
 	vm.ID = uuid.New().String()
 	return nil
 }
