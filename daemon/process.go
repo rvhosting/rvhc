@@ -2,6 +2,8 @@ package daemon
 
 import (
 	"net"
+	"rvhc/daemon/internal/dataimg"
+	"rvhc/daemon/internal/db"
 	"rvhc/daemon/internal/fns"
 	"rvhc/protocol"
 )
@@ -30,6 +32,32 @@ func process(conn net.Conn) {
 			}
 
 			if err := protocol.Write(conn, result); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
+		case "create":
+			var vm db.VM
+			if err := payload.UnmarshalTo(&vm); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			vm.Running = false
+			result := db.Create(&vm)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			if err := dataimg.Create(vm.ID, vm.DataSize); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			if err := protocol.Write(conn, vm); err != nil {
 				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
 				return
 			}
