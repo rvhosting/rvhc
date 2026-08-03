@@ -4,6 +4,7 @@ import (
 	"errors"
 	"runtime"
 
+	"github.com/shirou/gopsutil/v4/disk"
 	"github.com/shirou/gopsutil/v4/mem"
 )
 
@@ -22,6 +23,14 @@ func GetLimit(names []string) (map[string]any, error) {
 			}
 
 			result["memory"] = memory
+
+		case "storage":
+			storage, err := disk.Usage("/")
+			if err != nil {
+				return nil, err
+			}
+
+			result["storage"] = storage
 
 		default:
 			return nil, errors.New("unknown name")
