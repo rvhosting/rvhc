@@ -1,6 +1,7 @@
 package fns
 
 import (
+	"errors"
 	"runtime"
 
 	"github.com/shirou/gopsutil/v4/mem"
@@ -21,6 +22,9 @@ func GetLimit(names []string) (map[string]any, error) {
 			}
 
 			result["memory"] = memory
+
+		default:
+			return nil, errors.New("unknown name")
 
 		}
 	}
