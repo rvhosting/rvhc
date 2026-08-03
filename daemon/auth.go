@@ -1,7 +1,6 @@
 package daemon
 
 import (
-	"log/slog"
 	"net"
 	"rvhc/protocol"
 )
@@ -9,11 +8,16 @@ import (
 func auth(conn net.Conn) bool {
 	var userAuth protocol.Auth
 	if err := protocol.Read(conn, &userAuth); err != nil {
-		slog.Error(err.Error())
+		protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
 		return false
 	}
 
 	success := userAuth == config.Auth
-	protocol.Write(conn, protocol.Status{Success: success})
-	return success
+	if !success {
+		protocol.Write(conn, protocol.Status{Success: false, Message: "auth failed"})
+		return false
+	}
+
+	protocol.Write(conn, protocol.Status{Success: true})
+	return true
 }
