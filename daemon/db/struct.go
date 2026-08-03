@@ -7,7 +7,7 @@ import (
 )
 
 type VM struct {
-	ID      string `gorm:"primaryKey;type:varchar(36)" json:"id"`
+	ID      string `gorm:"primaryKey;type:varchar(36);not null" json:"id"`
 	DataImg string `gorm:"type:text;not null;unique" json:"data"`
 	CPU     uint8  `gorm:"not null" json:"cpu"`
 	Memory  uint16 `gorm:"not null" json:"memory"` // MB
