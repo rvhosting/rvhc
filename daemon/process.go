@@ -64,6 +64,26 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Status{Success: true})
 
+		case "delete":
+			var vmID string
+			if err := payload.UnmarshalTo(&vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			result := db.Delete(vmID)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			if err := dataimg.Delete(vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Status{Success: false, Message: "unknown type"})
 			return
