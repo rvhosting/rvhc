@@ -99,6 +99,27 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Status{Success: true})
 
+		case "get-vm-info":
+			var vmID string
+			if err := payload.UnmarshalTo(&vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			var vm db.VM
+			result := db.GetInfo(vmID, &vm)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			if err := protocol.Write(conn, vm); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Status{Success: false, Message: "unknown type"})
 			return
