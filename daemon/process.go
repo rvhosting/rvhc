@@ -84,6 +84,21 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Status{Success: true})
 
+		case "get-vms":
+			var vmIDs []string
+			result := db.GetIDs(&vmIDs)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			if err := protocol.Write(conn, vmIDs); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Status{Success: false, Message: "unknown type"})
 			return
