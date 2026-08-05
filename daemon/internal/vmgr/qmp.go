@@ -1,6 +1,7 @@
 package vmgr
 
 import (
+	"bufio"
 	"io"
 	"os/exec"
 )
@@ -43,4 +44,27 @@ func NewQMP(cmd *exec.Cmd) (*QMP, error) {
 		stdin:  stdin,
 		stdout: stdout,
 	}, nil
+}
+
+func InitQMP(qmp *QMP) error {
+	reader := bufio.NewReader(qmp)
+	writer := bufio.NewWriter(qmp)
+
+	if _, err := reader.ReadString('\n'); err != nil {
+		return err
+	}
+
+	if _, err := writer.WriteString(`{"execute":"qmp_capabilities"}` + "\n"); err != nil {
+		return err
+	}
+
+	if err := writer.Flush(); err != nil {
+		return err
+	}
+
+	if _, err := reader.ReadString('\n'); err != nil {
+		return err
+	}
+
+	return nil
 }
