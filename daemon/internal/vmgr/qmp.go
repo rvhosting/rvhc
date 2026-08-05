@@ -3,6 +3,7 @@ package vmgr
 import (
 	"bufio"
 	"io"
+	"log"
 	"os/exec"
 )
 
@@ -50,18 +51,22 @@ func InitQMP(qmp *QMP) error {
 	reader := bufio.NewReader(qmp)
 	writer := bufio.NewWriter(qmp)
 
+	log.Println("wait qmp welcome message")
 	if _, err := reader.ReadString('\n'); err != nil {
 		return err
 	}
 
+	log.Println("execute qmp_capabilities command")
 	if _, err := writer.WriteString(`{"execute":"qmp_capabilities"}` + "\n"); err != nil {
 		return err
 	}
 
+	log.Println("wait qmp_capabilities command send")
 	if err := writer.Flush(); err != nil {
 		return err
 	}
 
+	log.Println("wait qmp_capabilities command response")
 	if _, err := reader.ReadString('\n'); err != nil {
 		return err
 	}
