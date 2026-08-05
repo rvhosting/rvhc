@@ -8,8 +8,8 @@ import (
 	"github.com/diskfs/go-diskfs/filesystem"
 )
 
-func Create(name string, size uint16) error {
-	realPath := filepath.Join(baseDir, name+".img")
+func Create(id string, size uint16) error {
+	realPath := filepath.Join(BaseDir, id+".img")
 	realSize := int64(size) * 1024 * 1024
 	img, err := diskfs.Create(realPath, realSize, diskfs.SectorSizeDefault)
 	if err != nil {

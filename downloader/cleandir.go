@@ -6,11 +6,11 @@ import (
 )
 
 func cleandir() {
-	if err := os.RemoveAll(baseDir); err != nil {
+	if err := os.RemoveAll(BaseDir); err != nil {
 		log.Fatalln(err)
 	}
 
-	if err := os.MkdirAll(baseDir, 0755); err != nil {
+	if err := os.MkdirAll(BaseDir, 0755); err != nil {
 		log.Fatalln(err)
 	}
 }

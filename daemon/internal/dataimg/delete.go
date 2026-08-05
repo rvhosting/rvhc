@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func Delete(name string) error {
-	realPath := filepath.Join(baseDir, name+".img")
+func Delete(id string) error {
+	realPath := filepath.Join(BaseDir, id+".img")
 	return os.RemoveAll(realPath)
 }

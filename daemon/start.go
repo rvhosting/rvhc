@@ -9,6 +9,7 @@ import (
 	"os"
 	"rvhc/daemon/internal/dataimg"
 	"rvhc/daemon/internal/db"
+	"rvhc/daemon/internal/vmgr"
 )
 
 var ConfigFile string
@@ -17,6 +18,7 @@ var config daemonConfig
 func Start() {
 	db.Init()
 	dataimg.Init()
+	vmgr.Init()
 
 	f, err := os.Open(ConfigFile)
 	if err != nil {

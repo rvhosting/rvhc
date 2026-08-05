@@ -5,10 +5,10 @@ import (
 	"os"
 )
 
-var baseDir = "dataimgs"
+var BaseDir = "dataimgs"
 
 func Init() {
-	fi, err := os.Stat(baseDir)
+	fi, err := os.Stat(BaseDir)
 	if os.IsNotExist(err) {
 		goto CREATE
 	}
@@ -21,12 +21,12 @@ func Init() {
 		return
 	}
 
-	if err := os.RemoveAll(baseDir); err != nil {
+	if err := os.RemoveAll(BaseDir); err != nil {
 		log.Fatalln(err)
 	}
 
 CREATE:
-	if err := os.MkdirAll(baseDir, 0755); err != nil {
+	if err := os.MkdirAll(BaseDir, 0755); err != nil {
 		log.Fatalln(err)
 	}
 }
