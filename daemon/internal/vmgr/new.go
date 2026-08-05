@@ -24,7 +24,7 @@ func New(vm db.VM) *exec.Cmd {
 			"file=%s,format=raw,if=virtio",
 			filepath.Join(dataimg.BaseDir, vm.ID+".img"),
 		),
-		"-netdev", "user,id=net0",
+		"-netdev", "user,id=net0,hostfwd=tcp:127.0.0.1:0-:22,hostfwd=tcp:127.0.0.1:0-:80",
 		"-device", "virtio-net-device,netdev=net0",
 		"-display", "none",
 		"-serial", "none",
