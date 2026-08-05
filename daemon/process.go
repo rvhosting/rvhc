@@ -5,6 +5,7 @@ import (
 	"rvhc/daemon/internal/dataimg"
 	"rvhc/daemon/internal/db"
 	"rvhc/daemon/internal/fns"
+	"rvhc/daemon/internal/vmgr"
 	"rvhc/protocol"
 )
 
@@ -115,6 +116,41 @@ func process(conn net.Conn) {
 
 			if err := protocol.Write(conn, vm); err != nil {
 				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
+		case "start":
+			var vmID string
+			if err := payload.UnmarshalTo(&vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			var vm db.VM
+			result := db.GetInfo(vmID, &vm)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			cmd := vmgr.New(vm)
+			qmp, err := vmgr.NewQMP(cmd)
+			if err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			vmgr.Start(vm.ID, qmp)
+			if err := vmgr.InitQMP(qmp); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			markResult := db.Mark(vm.ID, true)
+			if markResult.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: markResult.Error.Error()})
 				return
 			}
 
