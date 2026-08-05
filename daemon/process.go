@@ -156,6 +156,26 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Status{Success: true})
 
+		case "stop":
+			var vmID string
+			if err := payload.UnmarshalTo(&vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			if err := vmgr.Quit(vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			markResult := db.Mark(vmID, false)
+			if markResult.Error != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: markResult.Error.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Status{Success: false, Message: "unknown type"})
 			return
