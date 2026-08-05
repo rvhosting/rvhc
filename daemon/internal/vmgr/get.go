@@ -1,17 +1,13 @@
 package vmgr
 
-import (
-	"os/exec"
-)
-
-func Get(id string) *exec.Cmd {
+func Get(id string) *QMP {
 	mu.RLock()
 	defer mu.RUnlock()
 
-	cmd, ok := vms[id]
+	qmp, ok := vms[id]
 	if !ok {
 		return nil
 	}
 
-	return cmd
+	return qmp
 }

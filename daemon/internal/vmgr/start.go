@@ -5,9 +5,9 @@ import (
 	"os/exec"
 )
 
-func Start(id string, cmd *exec.Cmd) {
+func Start(id string, qmp *QMP) {
 	mu.Lock()
-	vms[id] = cmd
+	vms[id] = qmp
 	mu.Unlock()
 
 	go func(id string, cmd *exec.Cmd) {
@@ -18,5 +18,5 @@ func Start(id string, cmd *exec.Cmd) {
 		mu.Lock()
 		delete(vms, id)
 		mu.Unlock()
-	}(id, cmd)
+	}(id, qmp.cmd)
 }
