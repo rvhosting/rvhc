@@ -5,5 +5,5 @@ import (
 )
 
 func GetRunningVMs(dest any) *gorm.DB {
-	return db.Where("running = ?", true).Find(&dest)
+	return db.Where("running = ?", true).Find(dest)
 }
