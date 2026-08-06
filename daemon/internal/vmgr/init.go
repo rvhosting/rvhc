@@ -23,7 +23,10 @@ func Init() {
 			log.Fatalln(err)
 		}
 
-		Start(vm.ID, qmp)
+		if err := Start(vm.ID, qmp); err != nil {
+			log.Fatalln(err)
+		}
+
 		if err := InitQMP(qmp); err != nil {
 			log.Fatalln(err)
 		}

@@ -4,9 +4,15 @@ import (
 	"log"
 	"log/slog"
 	"os/exec"
+	"rvhc/daemon/internal/db"
 )
 
-func Start(id string, qmp *QMP) {
+func Start(id string, qmp *QMP) error {
+	result := db.Mark(id, true)
+	if result.Error != nil {
+		return result.Error
+	}
+
 	mu.Lock()
 	vms[id] = qmp
 	mu.Unlock()
@@ -23,5 +29,12 @@ func Start(id string, qmp *QMP) {
 		mu.Unlock()
 
 		log.Println("vm", id, "stop")
+
+		result := db.Mark(id, false)
+		if result.Error != nil {
+			slog.Error(result.Error.Error())
+		}
 	}(id, qmp.cmd)
+
+	return nil
 }

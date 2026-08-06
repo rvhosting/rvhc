@@ -122,15 +122,13 @@ func process(conn net.Conn) {
 				return
 			}
 
-			vmgr.Start(vm.ID, qmp)
-			if err := vmgr.InitQMP(qmp); err != nil {
+			if err := vmgr.Start(vm.ID, qmp); err != nil {
 				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
 				return
 			}
 
-			markResult := db.Mark(vm.ID, true)
-			if markResult.Error != nil {
-				protocol.Write(conn, protocol.Response{Success: false, Message: markResult.Error.Error()})
+			if err := vmgr.InitQMP(qmp); err != nil {
+				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
 				return
 			}
 
@@ -145,12 +143,6 @@ func process(conn net.Conn) {
 
 			if err := vmgr.Quit(vmID); err != nil {
 				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
-				return
-			}
-
-			markResult := db.Mark(vmID, false)
-			if markResult.Error != nil {
-				protocol.Write(conn, protocol.Response{Success: false, Message: markResult.Error.Error()})
 				return
 			}
 
