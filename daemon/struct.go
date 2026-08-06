@@ -12,4 +12,5 @@ type ListenConfig struct {
 type daemonConfig struct {
 	Listen ListenConfig `json:"listen"`
 	protocol.Auth
+	SSHD int `json:"sshd"`
 }

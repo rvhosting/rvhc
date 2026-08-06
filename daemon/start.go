@@ -9,6 +9,7 @@ import (
 	"os"
 	"rvhc/daemon/internal/dataimg"
 	"rvhc/daemon/internal/db"
+	"rvhc/daemon/internal/sshd"
 	"rvhc/daemon/internal/vmgr"
 )
 
@@ -28,6 +29,9 @@ func Start() {
 	if err := json.NewDecoder(f).Decode(&config); err != nil {
 		log.Fatalln(err)
 	}
+
+	f.Close()
+	sshd.Init(config.SSHD)
 
 	addr := fmt.Sprintf(
 		"%s:%d",
