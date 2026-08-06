@@ -3,11 +3,14 @@ module rvhc
 go 1.25.12
 
 require (
+	github.com/cmoog/sshproxy v0.2.0
 	github.com/diskfs/go-diskfs v1.9.4
+	github.com/fasmide/hostkeys v0.0.0-20211023164018-0a66d786b24e
 	github.com/glebarez/sqlite v1.11.0
 	github.com/google/uuid v1.6.0
 	github.com/shirou/gopsutil/v4 v4.26.7
 	github.com/spf13/cobra v1.10.2
+	golang.org/x/crypto v0.6.0
 	gorm.io/gorm v1.31.2
 )
 
