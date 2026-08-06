@@ -5,12 +5,14 @@ import (
 	"io"
 	"log"
 	"os/exec"
+	"sync"
 )
 
 type QMP struct {
 	cmd    *exec.Cmd
 	stdin  io.Writer
 	stdout io.Reader
+	mu     sync.Mutex
 }
 
 func (q *QMP) Read(p []byte) (n int, err error) {
@@ -27,6 +29,14 @@ func (q *QMP) Write(p []byte) (n int, err error) {
 	}
 
 	return q.stdin.Write(p)
+}
+
+func (q *QMP) Lock() {
+	q.mu.Lock()
+}
+
+func (q *QMP) Unlock() {
+	q.mu.Unlock()
 }
 
 func NewQMP(cmd *exec.Cmd) (*QMP, error) {
@@ -48,6 +58,9 @@ func NewQMP(cmd *exec.Cmd) (*QMP, error) {
 }
 
 func InitQMP(qmp *QMP) error {
+	qmp.Lock()
+	defer qmp.Unlock()
+
 	reader := bufio.NewReader(qmp)
 	writer := bufio.NewWriter(qmp)
 

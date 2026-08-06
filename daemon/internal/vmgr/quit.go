@@ -13,6 +13,9 @@ func Quit(id string) error {
 		return errors.New("unknown vm id")
 	}
 
+	qmp.Lock()
+	defer qmp.Unlock()
+
 	log.Println("execute quit command")
 	writer := bufio.NewWriter(qmp)
 	if _, err := writer.WriteString(`{"execute":"quit"}` + "\n"); err != nil {

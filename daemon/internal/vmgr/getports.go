@@ -15,6 +15,9 @@ func GetPorts(id string) (map[int]int, error) {
 		return nil, errors.New("unknown vm id")
 	}
 
+	qmp.Lock()
+	defer qmp.Unlock()
+
 	log.Println("execute human-monitor-command")
 	writer := bufio.NewWriter(qmp)
 	if _, err := writer.WriteString(`{"execute":"human-monitor-command","arguments":{"command-line":"info usernet"}}` + "\n"); err != nil {
