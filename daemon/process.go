@@ -115,6 +115,11 @@ func process(conn net.Conn) {
 				return
 			}
 
+			if vm.Running {
+				protocol.Write(conn, protocol.Response{Success: false, Message: "vm already running"})
+				return
+			}
+
 			cmd := vmgr.New(vm)
 			qmp, err := vmgr.NewQMP(cmd)
 			if err != nil {
