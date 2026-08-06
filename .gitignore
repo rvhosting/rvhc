@@ -44,4 +44,4 @@ minihttpsys/
 dataimgs/
 
 # sshd host keys
-sshd_host_key/
+hostkeys/

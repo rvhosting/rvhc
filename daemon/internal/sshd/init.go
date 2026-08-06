@@ -6,13 +6,12 @@ import (
 	"log/slog"
 	"net"
 	"os"
-	"path/filepath"
 
 	"github.com/fasmide/hostkeys"
 	"golang.org/x/crypto/ssh"
 )
 
-var hostKeyDir = "sshd_host_key"
+var hostKeyDir = "hostkeys"
 
 func Init(port int) {
 	if err := os.MkdirAll(hostKeyDir, 0755); err != nil {
@@ -24,7 +23,7 @@ func Init(port int) {
 	}
 
 	manager := &hostkeys.Manager{
-		Directory:    filepath.Join(".", hostKeyDir),
+		Directory:    hostKeyDir,
 		NamingScheme: "ssh_host_%s_key",
 	}
 
