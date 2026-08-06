@@ -4,11 +4,6 @@ import (
 	"encoding/json"
 )
 
-type Status struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 type Auth struct {
 	Auth string `json:"auth"`
 }
@@ -16,4 +11,10 @@ type Auth struct {
 type Payload struct {
 	Type string          `json:"type"`
 	Body json.RawMessage `json:"body"`
+}
+
+type Response struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+	Body    any    `json:"body"`
 }
