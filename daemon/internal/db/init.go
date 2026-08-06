@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"sync"
 
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
@@ -9,6 +10,7 @@ import (
 
 var dbFile = "vm.db"
 var db *gorm.DB
+var mu sync.Mutex
 
 func Init() {
 	var err error
