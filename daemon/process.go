@@ -171,6 +171,25 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Response{Success: true, Body: portMap})
 
+		case "set-password":
+			var body struct {
+				ID  string `json:"id"`
+				Pwd string `json:"password"`
+			}
+
+			if err := payload.UnmarshalTo(&body); err != nil {
+				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
+				return
+			}
+
+			result := db.SetPassword(body.ID, body.Pwd)
+			if result.Error != nil {
+				protocol.Write(conn, protocol.Response{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Response{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Response{Success: false, Message: "unknown type"})
 			return
