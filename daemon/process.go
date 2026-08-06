@@ -176,6 +176,26 @@ func process(conn net.Conn) {
 
 			protocol.Write(conn, protocol.Status{Success: true})
 
+		case "get-ports":
+			var vmID string
+			if err := payload.UnmarshalTo(&vmID); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			portMap, err := vmgr.GetPorts(vmID)
+			if err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			if err := protocol.Write(conn, portMap); err != nil {
+				protocol.Write(conn, protocol.Status{Success: false, Message: err.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Status{Success: true})
+
 		default:
 			protocol.Write(conn, protocol.Status{Success: false, Message: "unknown type"})
 			return
