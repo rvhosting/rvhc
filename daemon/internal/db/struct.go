@@ -12,6 +12,7 @@ type VM struct {
 	Memory   uint16 `gorm:"not null" json:"memory"`    // MB
 	DataSize uint16 `gorm:"not null" json:"data_size"` // MB
 	Running  bool   `gorm:"not null" json:"running"`
+	PwdHash  string `gorm:"not null" json:"pwd_hash"`
 }
 
 func (vm *VM) BeforeCreate(*gorm.DB) error {
