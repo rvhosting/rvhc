@@ -23,8 +23,15 @@ func GetPorts(id string) (map[int]int, error) {
 
 	for _, match := range matches {
 		if len(match) == 3 {
-			hostPort, _ := strconv.Atoi(match[1])
-			guestPort, _ := strconv.Atoi(match[2])
+			hostPort, err := strconv.Atoi(match[1])
+			if err != nil {
+				return nil, err
+			}
+
+			guestPort, err := strconv.Atoi(match[2])
+			if err != nil {
+				return nil, err
+			}
 
 			if guestPort == 22 || guestPort == 80 {
 				portMap[guestPort] = hostPort
