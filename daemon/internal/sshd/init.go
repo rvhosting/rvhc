@@ -39,7 +39,7 @@ func Init(port int) {
 	}
 
 	log.Println("start sshd")
-	go func() {
+	go func(listener net.Listener, server ssh.ServerConfig) {
 		for {
 			conn, err := listener.Accept()
 			if err != nil {
@@ -49,5 +49,5 @@ func Init(port int) {
 
 			go process(conn, server)
 		}
-	}()
+	}(listener, server)
 }
