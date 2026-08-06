@@ -10,6 +10,12 @@ rvhosting cli
         "host": "127.0.0.1",
         "port": 8001
     },
-    "auth": "abc"
+
+    "auth": "abc",
+
+    "sshd": {
+        "host": "127.0.0.1",
+        "port": 2222
+    }
 }
 ```
