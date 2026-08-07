@@ -5,6 +5,7 @@ import (
 	"rvhc/daemon/internal/dataimg"
 	"rvhc/daemon/internal/db"
 	"rvhc/daemon/internal/fns"
+	"rvhc/daemon/internal/httpd"
 	"rvhc/daemon/internal/vmgr"
 	"rvhc/protocol"
 )
@@ -182,6 +183,24 @@ func process(conn net.Conn) {
 			result := db.SetPassword(body.ID, body.Pwd)
 			if result.Error != nil {
 				protocol.Write(conn, protocol.Response{Success: false, Message: result.Error.Error()})
+				return
+			}
+
+			protocol.Write(conn, protocol.Response{Success: true})
+
+		case "bind-domain":
+			var body struct {
+				ID     string `json:"id"`
+				Domain string `json:"domain"`
+			}
+
+			if err := payload.UnmarshalTo(&body); err != nil {
+				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
+				return
+			}
+
+			if err := httpd.Bind(body.Domain, body.ID); err != nil {
+				protocol.Write(conn, protocol.Response{Success: false, Message: err.Error()})
 				return
 			}
 
