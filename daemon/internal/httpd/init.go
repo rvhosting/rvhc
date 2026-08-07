@@ -11,6 +11,7 @@ import (
 	"github.com/caddyserver/certmagic"
 )
 
+var tlsCertsDir = "tlscerts"
 var hostsFile = "httpdhosts.json"
 var hosts = map[string]string{}
 var mu sync.RWMutex
@@ -36,6 +37,9 @@ func Init() {
 
 			return nil
 		},
+	}
+	cfg.Storage = &certmagic.FileStorage{
+		Path: tlsCertsDir,
 	}
 
 	server := &http.Server{

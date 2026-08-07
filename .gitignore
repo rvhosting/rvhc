@@ -45,3 +45,6 @@ dataimgs/
 
 # sshd host keys
 hostkeys/
+
+# httpd tls certs
+tlscerts/
