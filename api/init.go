@@ -1,7 +1,7 @@
 package api
 
 import (
-	"rvhc/api/config"
+	"rvhc/api/pkg/config"
 )
 
 var ConfigFile string
