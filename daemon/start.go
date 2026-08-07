@@ -1,37 +1,24 @@
 package daemon
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"log/slog"
 	"net"
-	"os"
 	"rvhc/daemon/internal/dataimg"
 	"rvhc/daemon/internal/db"
+	"rvhc/daemon/internal/httpd"
 	"rvhc/daemon/internal/sshd"
 	"rvhc/daemon/internal/vmgr"
 )
 
-var ConfigFile string
-var config daemonConfig
-
 func Start() {
+	Init()
 	db.Init()
 	dataimg.Init()
 	vmgr.Init()
-
-	f, err := os.Open(ConfigFile)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	if err := json.NewDecoder(f).Decode(&config); err != nil {
-		log.Fatalln(err)
-	}
-
-	f.Close()
 	sshd.Init(config.SSHD)
+	httpd.Init()
 
 	addr := fmt.Sprintf(
 		"%s:%d",
