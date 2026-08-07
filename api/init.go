@@ -1,6 +1,12 @@
 package api
 
+import (
+	"rvhc/api/config"
+)
+
 var ConfigFile string
 var DaemonName string
 
-func Init() {}
+func Init() {
+	config.Load(ConfigFile, DaemonName)
+}

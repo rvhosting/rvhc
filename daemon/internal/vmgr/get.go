@@ -4,8 +4,8 @@ func Get(id string) *QMP {
 	mu.RLock()
 	defer mu.RUnlock()
 
-	qmp, ok := vms[id]
-	if !ok {
+	qmp, exist := vms[id]
+	if !exist {
 		return nil
 	}
 
