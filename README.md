@@ -14,3 +14,17 @@ rvhosting cli
     "sshd": 2222
 }
 ```
+
+## base api config (api.json)
+
+```json
+{
+    "default": {
+        "listen": {
+            "host": "127.0.0.1",
+            "port": 8001
+        },
+        "auth": "abc"
+    }
+}
+```
