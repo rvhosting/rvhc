@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func LoadHosts() error {
+func loadHosts() error {
 	mu.Lock()
 	defer mu.Unlock()
 

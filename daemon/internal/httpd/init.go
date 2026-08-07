@@ -17,7 +17,7 @@ var hosts = map[string]string{}
 var mu sync.RWMutex
 
 func Init() {
-	if err := LoadHosts(); err != nil {
+	if err := loadHosts(); err != nil {
 		log.Fatalln(err)
 	}
 
