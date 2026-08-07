@@ -1,6 +1,7 @@
 package cli
 
 import (
+	"rvhc/api"
 	"rvhc/daemon"
 	"rvhc/downloader"
 
@@ -25,5 +26,16 @@ var downloadCmd = &cobra.Command{
 	Short: "download minihttpsys",
 	Run: func(cmd *cobra.Command, args []string) {
 		downloader.Download()
+	},
+}
+
+var apiCmd = &cobra.Command{
+	Use:   "api",
+	Short: "daemon api",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		api.Init()
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
 	},
 }
