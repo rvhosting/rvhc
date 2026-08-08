@@ -21,6 +21,8 @@ func Open(dc config.DaemonConfig) {
 		log.Fatalln(err)
 	}
 
+	conn = c
+
 	if err := protocol.Write(conn, dc.Auth); err != nil {
 		log.Fatalln(err)
 	}
@@ -33,6 +35,4 @@ func Open(dc config.DaemonConfig) {
 	if !resp.Success {
 		log.Fatalln(resp.Message)
 	}
-
-	conn = c
 }
