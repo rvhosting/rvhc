@@ -20,10 +20,9 @@ func Start() {
 	sshd.Init(config.SSHD)
 	httpd.Init()
 
-	addr := fmt.Sprintf(
-		"%s:%d",
+	addr := net.JoinHostPort(
 		config.Listen.Host,
-		config.Listen.Port,
+		fmt.Sprintf("%d", config.Listen.Port),
 	)
 
 	listener, err := net.Listen("tcp", addr)
